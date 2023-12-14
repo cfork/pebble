@@ -49,6 +49,7 @@ func main() {
 		ycsbCmd,
 		fsBenchCmd,
 		writeBenchCmd,
+		myCmd,
 	)
 
 	rootCmd := &cobra.Command{
@@ -76,7 +77,7 @@ func main() {
 		cmd.Flags().DurationVarP(
 			&duration, "duration", "d", 10*time.Second, "the duration to run (0, run forever)")
 	}
-	for _, cmd := range []*cobra.Command{scanCmd, syncCmd, tombstoneCmd, ycsbCmd} {
+	for _, cmd := range []*cobra.Command{scanCmd, syncCmd, tombstoneCmd, ycsbCmd, myCmd} {
 		cmd.Flags().IntVarP(
 			&concurrency, "concurrency", "c", 1, "number of concurrent workers")
 		cmd.Flags().BoolVar(
