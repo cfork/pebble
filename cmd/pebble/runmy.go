@@ -50,15 +50,10 @@ func write(db *pebble.DB) {
 			log.Println("write", i-previ, "ops/5 sec")
 			previ = i
 		default:
-			batch := db.NewBatch()
 			key := []byte(strconv.Itoa(rand.Intn(max)))
-			if err := batch.Set(key, value, nil); err != nil {
-				log.Fatal(err)
+			if err := db.Set(key, value, writeOpts); err != nil {
+				time.Sleep(100 * time.Millisecond)
 			}
-			if err := batch.Commit(writeOpts); err != nil {
-				log.Fatal(err)
-			}
-			time.Sleep(100 * time.Millisecond)
 		}
 	}
 }
