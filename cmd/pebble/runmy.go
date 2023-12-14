@@ -52,8 +52,9 @@ func write(db *pebble.DB) {
 		default:
 			key := []byte(strconv.Itoa(rand.Intn(max)))
 			if err := db.Set(key, value, writeOpts); err != nil {
-				time.Sleep(100 * time.Millisecond)
+				log.Fatal(err)
 			}
+			time.Sleep(100 * time.Millisecond)
 		}
 	}
 }
