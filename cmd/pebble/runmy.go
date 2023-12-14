@@ -28,7 +28,6 @@ func runmy() {
 	batch.Commit(writeOpts)
 
 	// write
-
 	go func() {
 		previ := 0
 		ticker := time.NewTicker(5 * time.Second)
@@ -47,6 +46,7 @@ func runmy() {
 		}
 	}()
 
+	// read
 	ticker := time.NewTicker(5 * time.Second)
 	previ := 0
 	for i := 0; ; i++ {
