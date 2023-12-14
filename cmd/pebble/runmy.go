@@ -42,7 +42,7 @@ func runmy() {
 				key := []byte(strconv.Itoa(rand.Intn(max)))
 				batch.Set(key, value, nil)
 				batch.Commit(writeOpts)
-				time.Sleep(time.Millisecond)
+				time.Sleep(100 * time.Millisecond)
 			}
 		}
 	}()
