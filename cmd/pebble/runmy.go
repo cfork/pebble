@@ -31,7 +31,9 @@ func main() {
 	batch := db.NewBatch()
 	for i := 0; i < max; i++ {
 		key := []byte(strconv.Itoa(i))
-		batch.Set(key, value, nil)
+		if err := batch.Set(key, value, nil); err != nil {
+			log.Fatal(err)
+		}
 	}
 	if err := batch.Commit(writeOpts); err != nil {
 		log.Fatal(err)
