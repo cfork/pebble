@@ -33,7 +33,9 @@ func main() {
 		key := []byte(strconv.Itoa(i))
 		batch.Set(key, value, nil)
 	}
-	batch.Commit(writeOpts)
+	if err := batch.Commit(writeOpts); err != nil {
+		log.Fatal(err)
+	}
 
 	go write(db)
 
