@@ -59,8 +59,9 @@ func write(db *pebble.DB) {
 			log.Println("write", i-previ, "ops/5 sec")
 			previ = i
 		default:
-			key := []byte(strconv.Itoa(rand.Intn(max)))
-			newValue := getValue(i)
+			n := rand.Intn(max)
+			key := []byte(strconv.Itoa(n))
+			newValue := getValue(n)
 			if err := db.Set(key, newValue, writeOpts); err != nil {
 				log.Fatal(err)
 			}
@@ -78,12 +79,13 @@ func read(db *pebble.DB) {
 			log.Println("read", i-previ, "ops/5 sec")
 			previ = i
 		default:
-			key := []byte(strconv.Itoa(rand.Intn(max)))
+			n := rand.Intn(max)
+			key := []byte(strconv.Itoa(n))
 			val, closer, err := db.Get(key)
 			if err != nil {
 				log.Fatal(err)
 			}
-			newValue := getValue(i)
+			newValue := getValue(n)
 			if !reflect.DeepEqual(val, newValue) {
 				log.Fatalf("not equal: %d\n%s\n%s", i, string(val), string(newValue))
 			}
