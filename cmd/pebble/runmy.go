@@ -85,7 +85,7 @@ func read(db *pebble.DB) {
 			}
 			newValue := getValue(i)
 			if !reflect.DeepEqual(val, newValue) {
-				log.Fatalf("not equal: %s", string(val))
+				log.Fatalf("not equal: %d\n%s\n%s", i, string(val), string(newValue))
 			}
 			if err := closer.Close(); err != nil {
 				log.Fatal(err)
