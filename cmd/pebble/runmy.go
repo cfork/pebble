@@ -10,9 +10,12 @@ import (
 	"github.com/cockroachdb/pebble"
 )
 
-const max = 1000 * 1000
+const (
+	max       = 1000 * 1000
+	valueSize = 1024
+)
 
-var value = make([]byte, 1024)
+var value = make([]byte, valueSize)
 
 func init() {
 	for i := 0; i < len(value); i++ {
@@ -32,7 +35,8 @@ func main() {
 	batch := db.NewBatch()
 	for i := 0; i < max; i++ {
 		key := []byte(strconv.Itoa(i))
-		if err := batch.Set(key, value, nil); err != nil {
+		newValue := getValue(i)
+		if err := batch.Set(key, newValue, nil); err != nil {
 			log.Fatal(err)
 		}
 	}
@@ -56,7 +60,8 @@ func write(db *pebble.DB) {
 			previ = i
 		default:
 			key := []byte(strconv.Itoa(rand.Intn(max)))
-			if err := db.Set(key, value, writeOpts); err != nil {
+			newValue := getValue(i)
+			if err := db.Set(key, newValue, writeOpts); err != nil {
 				log.Fatal(err)
 			}
 			time.Sleep(100 * time.Millisecond)
@@ -78,7 +83,8 @@ func read(db *pebble.DB) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			if !reflect.DeepEqual(val, value) {
+			newValue := getValue(i)
+			if !reflect.DeepEqual(val, newValue) {
 				log.Fatalf("not equal: %s", string(val))
 			}
 			if err := closer.Close(); err != nil {
@@ -98,4 +104,12 @@ func newBenchDB(dir string) *pebble.DB {
 		log.Fatal(err)
 	}
 	return p
+}
+
+func getValue(val int) []byte {
+	ret := make([]byte, valueSize)
+	copy(ret, value)
+	b := []byte(strconv.Itoa(val))
+	copy(ret, b)
+	return ret
 }
