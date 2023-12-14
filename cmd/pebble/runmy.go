@@ -39,8 +39,12 @@ func runmy() {
 			default:
 				batch := db.NewBatch()
 				key := []byte(strconv.Itoa(rand.Intn(max)))
-				batch.Set(key, value, nil)
-				batch.Commit(writeOpts)
+				if err := batch.Set(key, value, nil); err != nil {
+					log.Fatal(err)
+				}
+				if err := batch.Commit(writeOpts); err != nil {
+					log.Fatal(err)
+				}
 				time.Sleep(100 * time.Millisecond)
 			}
 		}
@@ -62,7 +66,9 @@ func runmy() {
 				_ = iter.Key()
 				_ = iter.Value()
 			}
-			iter.Close()
+			if err := iter.Close(); err != nil {
+				log.Fatal(err)
+			}
 		}
 	}
 
