@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"math/rand"
+	"reflect"
 	"strconv"
 	"time"
 
@@ -73,9 +74,12 @@ func read(db *pebble.DB) {
 			previ = i
 		default:
 			key := []byte(strconv.Itoa(rand.Intn(max)))
-			_, closer, err := db.Get(key)
+			val, closer, err := db.Get(key)
 			if err != nil {
 				log.Fatal(err)
+			}
+			if !reflect.DeepEqual(val, value) {
+				log.Fatalf("not equal: %s", string(val))
 			}
 			if err := closer.Close(); err != nil {
 				log.Fatal(err)
