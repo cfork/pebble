@@ -31,6 +31,11 @@ var (
 )
 
 func main() {
+	if 1 < 2 {
+		runmy()
+		return
+	}
+
 	log.SetFlags(0)
 
 	cobra.EnableCommandSorting = false
