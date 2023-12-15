@@ -11,8 +11,9 @@ import (
 )
 
 const (
-	max       = 1000 * 1000
-	valueSize = 1024
+	max                 = 1000 * 1000
+	valueSize           = 1024
+	printFrequencyInSec = 5
 )
 
 var value = make([]byte, valueSize)
@@ -52,11 +53,11 @@ func main() {
 
 func write(db *pebble.DB) {
 	previ := 0
-	ticker := time.NewTicker(5 * time.Second)
+	ticker := time.NewTicker(printFrequencyInSec * time.Second)
 	for i := 0; ; i++ {
 		select {
 		case <-ticker.C:
-			log.Println("write", i-previ, "ops/5 sec")
+			log.Println("write", (i-previ)/printFrequencyInSec, "ops/sec")
 			previ = i
 		default:
 			n := rand.Intn(max)
@@ -71,12 +72,12 @@ func write(db *pebble.DB) {
 }
 
 func read(db *pebble.DB) {
-	ticker := time.NewTicker(5 * time.Second)
+	ticker := time.NewTicker(printFrequencyInSec * time.Second)
 	previ := 0
 	for i := 0; ; i++ {
 		select {
 		case <-ticker.C:
-			log.Println("read", i-previ, "ops/5 sec")
+			log.Println("read", (i-previ)/printFrequencyInSec, "ops/sec")
 			previ = i
 		default:
 			n := rand.Intn(max)
