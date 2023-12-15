@@ -44,6 +44,7 @@ func main() {
 	if err := batch.Commit(writeOpts); err != nil {
 		log.Fatal(err)
 	}
+	db.Flush()
 
 	go write(db)
 
