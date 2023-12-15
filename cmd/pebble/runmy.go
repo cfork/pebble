@@ -39,6 +39,8 @@ func main() {
 	max := 1000 * 1000
 
 	// init
+	log.Printf("initing...")
+	start := time.Now()
 	batch := db.NewBatch()
 	for i := 0; i < max; i++ {
 		key := []byte(strconv.Itoa(i))
@@ -50,7 +52,10 @@ func main() {
 	if err := batch.Commit(writeOpts); err != nil {
 		log.Fatal(err)
 	}
+	log.Printf("init done, took %s", time.Since(start))
+	start = time.Now()
 	db.Flush()
+	log.Printf("flush done, took %s", time.Since(start))
 
 	go metrics()
 	go write(db)
