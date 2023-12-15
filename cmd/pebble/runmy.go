@@ -4,8 +4,8 @@ import (
 	"log"
 	"math/rand"
 	"reflect"
-	"runtime/internal/atomic"
 	"strconv"
+	"sync/atomic"
 	"time"
 
 	"github.com/cockroachdb/pebble"
